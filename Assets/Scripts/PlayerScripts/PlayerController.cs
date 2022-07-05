@@ -63,7 +63,7 @@ public class PlayerController : StateMachine
         blockInput = Input.GetKey(blockKey);
         shotInputDown = Input.GetKeyDown(shotKey);
         shotInputUp = Input.GetKeyUp(shotKey);
-        jumpInput = Input.GetKey(jumpKey);
+        //jumpInput = Input.GetKey(jumpKey);
     }
 
 

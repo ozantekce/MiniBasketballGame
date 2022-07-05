@@ -123,6 +123,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!4 &322597325 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2675343182436292169, guid: 65b35add19997b641b11640b6d34efd1, type: 3}
+  m_PrefabInstance: {fileID: 807382881}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &382397851 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3988546726805386798, guid: 57e45eed284f276419d172d72ba44431, type: 3}
@@ -364,13 +369,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Environment
       objectReference: {fileID: 0}
+    - target: {fileID: 7346717667333099473, guid: 65b35add19997b641b11640b6d34efd1, type: 3}
+      propertyPath: m_Name
+      value: Hoop team1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7346717667930766774, guid: 65b35add19997b641b11640b6d34efd1, type: 3}
+      propertyPath: m_Name
+      value: Hoop team2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 65b35add19997b641b11640b6d34efd1, type: 3}
---- !u!4 &855815643 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2675343183033951278, guid: 65b35add19997b641b11640b6d34efd1, type: 3}
-  m_PrefabInstance: {fileID: 807382881}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &866954191
 GameObject:
   m_ObjectHideFlags: 0
@@ -1812,7 +1820,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _updateType: 0
-  rivalHoop: {fileID: 855815643}
+  rivalHoop: {fileID: 322597325}
   jumpKey: 32
   shotKey: 106
   blockKey: 107
