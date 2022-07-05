@@ -7,18 +7,43 @@ public class PlayerController : StateMachine
 {
 
 
-    private Player player;
+    public Transform rivalHoop;
+
+    private Player _player;
     public KeyCode jumpKey, shotKey, blockKey;
     public Vector3 movementInput;
     public bool jumpInput, shotInputDown, shotInputUp, blockInput;
 
 
-    public static State IdleState;
+    private IdleState _idleState;
+    private RunState _runState;
+    private DribblingState _dribblingState;
+    private IdleWithBallState _idleWithBallState;
+    private ShotState _shotState;
+    private JumpState _jumpState;
 
+    public IdleState IdleState { get => _idleState; set => _idleState = value; }
+    public RunState RunState { get => _runState; set => _runState = value; }
+    public DribblingState DribblingState { get => _dribblingState; set => _dribblingState = value; }
+    public IdleWithBallState IdleWithBallState { get => _idleWithBallState; set => _idleWithBallState = value; }
+    public ShotState ShotState { get => _shotState; set => _shotState = value; }
+    public JumpState JumpState { get => _jumpState; set => _jumpState = value; }
+    public Player Player { get => _player; set => _player = value; }
 
     void Start()
     {
-        player = GetComponent<Player>();
+
+        _idleState = new IdleState();
+        _runState = new RunState();
+        _dribblingState = new DribblingState();
+        _idleWithBallState = new IdleWithBallState();
+        _shotState = new ShotState();
+        _jumpState = new JumpState();
+
+        _player = GetComponent<Player>();
+        initialState = _idleState;
+
+
     }
     void Update()
     {
@@ -42,12 +67,72 @@ public class PlayerController : StateMachine
     }
 
 
+
+
+    #region Conditions
     public bool MovementInput()
     {
         return movementInput != Vector3.zero;
     }
 
+    public bool OwnerOfBall()
+    {
+        return Ball.Instance.IsOwner(this.gameObject);
+    }
 
+    public bool ShotInputDown()
+    {
+        return shotInputDown;
+    }
+
+    public bool ShotInputUp()
+    {
+        return shotInputUp;
+    }
+
+    public bool JumpInputDown()
+    {
+        return jumpInput;
+    }
+
+
+
+    #endregion
+
+
+
+    public ShotScrollBar shotScrollBar;
+
+    public void OpenShotScrollBar()
+    {
+        shotScrollBar.mul = 10 / Vector3.Distance(transform.position, rivalHoop.position);
+        shotScrollBar.gameObject.SetActive(true);
+
+    }
+
+    public void CloseShotScrollBar()
+    {
+        shotScrollBar.gameObject.SetActive(false);
+    }
+
+    public Vector3 ShotTargetPosition()
+    {
+
+        float val = Mathf.Abs(shotScrollBar.value - 0.5f);
+
+        Vector3 pos = rivalHoop.position;
+
+        pos = Deformation.Deform(pos, val * 100, val * 100);
+
+        return pos;
+
+    }
+
+
+    public void SendBallToMidOfHands()
+    {
+        Ball.Instance.transform.position = Player.middleOfHands.position;
+    }
 
 
 }

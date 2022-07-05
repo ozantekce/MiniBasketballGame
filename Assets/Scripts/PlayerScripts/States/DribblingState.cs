@@ -2,17 +2,46 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DribblingState : MonoBehaviour
+public class DribblingState : State
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void Enter(StateMachine stateMachine)
     {
-        
+
+
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void Execute(StateMachine stateMachine)
     {
-        
+
+        PlayerController playerController = (PlayerController)stateMachine;
+
+        if (!playerController.OwnerOfBall())
+        {
+            playerController.ChangeCurrentState(playerController.IdleState);
+        }
+        else if (playerController.ShotInputDown())
+        {
+            playerController.ChangeCurrentState(playerController.ShotState);
+        }
+        else if (playerController.JumpInputDown())
+        {
+            playerController.ChangeCurrentState(playerController.JumpState);
+        }
+        else if (!playerController.MovementInput())
+        {
+            playerController.ChangeCurrentState(playerController.IdleWithBallState);
+        }
+
+
+        playerController.Player.Dribbling();
+        playerController.Player.Move(MovementType.moveToDirection, playerController.movementInput);
+
+
+    }
+
+    public override void Exit(StateMachine stateMachine)
+    {
+
+
     }
 }

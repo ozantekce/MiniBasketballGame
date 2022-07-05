@@ -123,6 +123,17 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &382397851 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3988546726805386798, guid: 57e45eed284f276419d172d72ba44431, type: 3}
+  m_PrefabInstance: {fileID: 645344203}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d5ec610580e29e4b8d41a4a9d8e8af1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &478047279
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -355,6 +366,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 65b35add19997b641b11640b6d34efd1, type: 3}
+--- !u!4 &855815643 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2675343183033951278, guid: 65b35add19997b641b11640b6d34efd1, type: 3}
+  m_PrefabInstance: {fileID: 807382881}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &866954191
 GameObject:
   m_ObjectHideFlags: 0
@@ -1778,7 +1794,7 @@ GameObject:
   - component: {fileID: 5415140240193613748}
   m_Layer: 0
   m_Name: Player_Human
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1795,6 +1811,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eee71eb961346c743acc23ba1131ba49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _updateType: 0
+  rivalHoop: {fileID: 855815643}
   jumpKey: 32
   shotKey: 106
   blockKey: 107
@@ -1803,6 +1821,7 @@ MonoBehaviour:
   shotInputDown: 0
   shotInputUp: 0
   blockInput: 0
+  shotScrollBar: {fileID: 382397851}
 --- !u!4 &5415140240304736840
 Transform:
   m_ObjectHideFlags: 0

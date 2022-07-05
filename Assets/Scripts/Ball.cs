@@ -16,6 +16,8 @@ public class Ball : MonoBehaviour
 
         instance = this;
         _rigidbody = GetComponent<Rigidbody>();
+
+        readyForNewOwner = new CooldownManualReset(1000f);
     }
 
     public static Ball Instance
@@ -35,15 +37,28 @@ public class Ball : MonoBehaviour
     private GameObject _owner;
 
 
+    private CooldownManualReset readyForNewOwner;
 
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            _owner = collision.gameObject;
+            if(readyForNewOwner.TimeOver())
+                _owner = collision.gameObject;
         }
     }
 
 
+
+    public bool IsOwner(GameObject gameObject)
+    {
+        return _owner == gameObject;
+    }
+
+    public void ResetOwner()
+    {
+        _owner = null;
+        readyForNewOwner.ResetTimer();
+    }
 
 }

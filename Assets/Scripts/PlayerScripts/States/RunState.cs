@@ -2,17 +2,40 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RunState : MonoBehaviour
+public class RunState : State
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void Enter(StateMachine stateMachine)
     {
-        
+
+
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void Execute(StateMachine stateMachine)
     {
+        PlayerController playerController = (PlayerController)stateMachine;
+
+        if (playerController.OwnerOfBall())
+        {
+            playerController.ChangeCurrentState(playerController.IdleWithBallState);
+        }
+        else if (playerController.JumpInputDown())
+        {
+            playerController.ChangeCurrentState(playerController.JumpState);
+        }
+        else if (!playerController.MovementInput())
+        {
+            playerController.ChangeCurrentState(playerController.IdleState);
+        }
+
+
+        playerController.Player.Move(MovementType.moveToDirection, playerController.movementInput);
         
+
+    }
+
+    public override void Exit(StateMachine stateMachine)
+    {
+
+
     }
 }

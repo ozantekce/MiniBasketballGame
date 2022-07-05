@@ -10,7 +10,6 @@ public class IdleState : State
 
     public override void Enter(StateMachine stateMachine)
     {
-        
     }
 
     public override void Execute(StateMachine stateMachine)
@@ -19,10 +18,20 @@ public class IdleState : State
 
 
 
-        if (playerController.MovementInput())
+        if (playerController.OwnerOfBall())
         {
-            //playerController.ChangeCurrentState(RunState);
+            playerController.ChangeCurrentState(playerController.IdleWithBallState);
         }
+        else if (playerController.JumpInputDown())
+        {
+            playerController.ChangeCurrentState(playerController.JumpState);
+
+        }
+        else if (playerController.MovementInput())
+        {
+            playerController.ChangeCurrentState(playerController.RunState);
+        }
+
 
     }
 
