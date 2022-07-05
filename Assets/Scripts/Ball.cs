@@ -32,9 +32,17 @@ public class Ball : MonoBehaviour
 
 
 
-    private Player _owner;
+    private GameObject _owner;
 
 
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            _owner = collision.gameObject;
+        }
+    }
 
 
 

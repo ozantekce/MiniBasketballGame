@@ -27,7 +27,7 @@ public class Player : MonoBehaviour
         rigidbody = gameObject.AddComponent<Rigidbody>();
         rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationY;
 
-        middleOfHands = transform.Find("MiddleOfHands");
+        middleOfHands = transform.Find("Body/Arms/RightShoulder/MiddleOfHands");
 
         hand = transform.Find("Body/Arms/RightShoulder/Hand").gameObject;
         ground = GameObject.Find("Ground");
