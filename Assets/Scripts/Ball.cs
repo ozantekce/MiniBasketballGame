@@ -88,11 +88,19 @@ public class Ball : MonoBehaviour
             rigidbody.isKinematic=true;
             rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
             ownerMidOfHands = owner.transform.Find("Body/Arms/RightShoulder/MidOfHands");
+            if (dribbling != null && dribbling.active)
+            {
+                dribbling.Kill();
+            }
         }
         else if(ballStatus == BallStatus.throwByPlayer)
         {
             rigidbody.isKinematic = false;
             rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+            if (dribbling != null && dribbling.active)
+            {
+                dribbling.Kill();
+            }
         }
 
 
@@ -145,9 +153,29 @@ public class Ball : MonoBehaviour
         transform.position = ownerMidOfHands.position;
     }
 
+    public Vector3 throwVector;
+    private bool throwing;
     private void ExecuteThrowStatus()
     {
 
+        if (!throwing)
+        {
+            StartCoroutine(ThrowRoutine(throwVector));
+        }
+
+    }
+
+    private IEnumerator ThrowRoutine(Vector3 vector)
+    {
+        rigidbody.isKinematic = false;
+        rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+        yield return new WaitForFixedUpdate();
+        rigidbody.velocity = vector;
+        // farkli bir seyler eklenebilir
+        yield return new WaitForSeconds(1f);
+        
+        ballStatus = BallStatus.free;
+        ballStatusChanged = true;
 
     }
 
