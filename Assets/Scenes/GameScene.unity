@@ -524,7 +524,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 994070685}
-  ballStatus: 1
+  ballStatus: 0
 --- !u!1001 &8927026911495214080
 PrefabInstance:
   m_ObjectHideFlags: 0

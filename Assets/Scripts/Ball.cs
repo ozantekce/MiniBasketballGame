@@ -87,6 +87,7 @@ public class Ball : MonoBehaviour
         {
             rigidbody.isKinematic=true;
             rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+            ownerMidOfHands = owner.transform.Find("Body/Arms/RightShoulder/MidOfHands");
         }
         else if(ballStatus == BallStatus.throwByPlayer)
         {
@@ -108,9 +109,6 @@ public class Ball : MonoBehaviour
 
     private bool dribblingComplate =true;
     private Tweener dribbling;
-
-    public float angle;
-    public float mag;
     private void ExecuteDribblingStatus()
     {
         float groundY = 0.7f;
@@ -141,10 +139,10 @@ public class Ball : MonoBehaviour
     }
 
 
+    private Transform ownerMidOfHands;
     private void ExecuteHoldingStatus()
     {
-
-
+        transform.position = ownerMidOfHands.position;
     }
 
     private void ExecuteThrowStatus()
