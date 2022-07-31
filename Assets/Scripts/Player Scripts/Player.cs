@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     private Rigidbody rigidbody;
 
     [SerializeField]
-    private float movementSpeed;
+    private float movementSpeed, rotationSpeed;
 
     private void Start()
     {
@@ -33,6 +33,8 @@ public class Player : MonoBehaviour
 
 
 
+
+
     private void Movement()
     {
         Vector3 directionVector = GetMovementInput();
@@ -40,6 +42,15 @@ public class Player : MonoBehaviour
         directionVector.y = rigidbody.velocity.y;
 
         rigidbody.velocity = directionVector;
+        if (directionVector != Vector3.zero)
+        {
+            transform.rotation
+            = Quaternion.Slerp(transform.rotation
+            , Quaternion.LookRotation(directionVector, Vector3.up)
+            , Time.deltaTime * rotationSpeed);
+        }
+
+
     }
 
     private Vector3 GetMovementInput()
