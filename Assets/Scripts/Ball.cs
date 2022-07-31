@@ -1,64 +1,166 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class Ball : MonoBehaviour
 {
-    //Singleton
-    private static Ball instance = null;
+
+    private Ball instance;
 
     private void Awake()
     {
-        if (instance != null && instance != this)
-        {
-            Destroy(this.gameObject);
-        }
-
         instance = this;
-        _rigidbody = GetComponent<Rigidbody>();
-
-        readyForNewOwner = new CooldownManualReset(1000f);
     }
 
-    public static Ball Instance
+
+    [SerializeField]
+    private GameObject owner;
+
+    private Rigidbody rigidbody;
+    [SerializeField]
+    private BallStatus ballStatus;
+
+    private void Start()
     {
-        get
+        ballStatus = BallStatus.free;
+        rigidbody = GetComponent<Rigidbody>();
+
+    }
+
+
+    private bool ballStatusChanged = false;
+
+    private void OnValidate()
+    {
+        ballStatusChanged = true;
+    }
+
+    private void Update()
+    {
+
+        if (ballStatusChanged)
         {
-            return instance;
+            OnStatusChanged();
+            ballStatusChanged = false;
         }
-    }
 
-    public Rigidbody Rigidbody { get => _rigidbody; set => _rigidbody = value; }
-
-    private Rigidbody _rigidbody;
-
-
-
-    private GameObject _owner;
-
-
-    private CooldownManualReset readyForNewOwner;
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
+        if (ballStatus == BallStatus.free)
         {
-            if(readyForNewOwner.TimeOver())
-                _owner = collision.gameObject;
+            ExecuteFreeStatus();
         }
+        else if (ballStatus == BallStatus.dribblingByPlayer)
+        {
+            ExecuteDribblingStatus();
+        }
+        else if (ballStatus == BallStatus.holdingByPlayer)
+        {
+            ExecuteHoldingStatus();
+        }
+        else if (ballStatus == BallStatus.throwByPlayer)
+        {
+            ExecuteThrowStatus();
+        }
+
     }
 
-
-
-    public bool IsOwner(GameObject gameObject)
+    private void OnStatusChanged()
     {
-        return _owner == gameObject;
+        if(ballStatus == BallStatus.free)
+        {
+            rigidbody.isKinematic = false;
+            rigidbody.constraints = RigidbodyConstraints.None;
+            if (dribbling!=null &&dribbling.active)
+            {
+                dribbling.Kill();
+            }
+            rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+        }
+        else if(ballStatus == BallStatus.dribblingByPlayer)
+        {
+            dribblingComplate = true;
+            rigidbody.isKinematic=true;
+            rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationY;
+            rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+        }
+        else if(ballStatus == BallStatus.holdingByPlayer)
+        {
+            rigidbody.isKinematic=true;
+            rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+        }
+        else if(ballStatus == BallStatus.throwByPlayer)
+        {
+            rigidbody.isKinematic = false;
+            rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+        }
+
+
+
     }
 
-    public void ResetOwner()
+
+
+    private void ExecuteFreeStatus()
     {
-        _owner = null;
-        readyForNewOwner.ResetTimer();
+
+
     }
 
+    private bool dribblingComplate =true;
+    private Tweener dribbling;
+    private void ExecuteDribblingStatus()
+    {
+        float groundY = 0.7f;
+        float handY = 1.8f;
+
+        transform.position = new Vector3(
+            owner.transform.position.x+0.2f
+            , transform.position.y
+            , owner.transform.position.z +0.6f
+            );
+
+        if (dribblingComplate)
+        {
+            dribblingComplate=false;
+            dribbling = transform.DOMoveY(groundY, 0.7f).OnComplete(delegate {
+                transform.DOMoveY(handY, 0.7f).OnComplete(delegate
+                {
+                    dribblingComplate = true;
+                });
+            });
+        }
+
+
+
+    }
+
+
+    private void ExecuteHoldingStatus()
+    {
+
+
+    }
+
+    private void ExecuteThrowStatus()
+    {
+
+
+    }
+
+
+
+    #region GetterSetter
+    public Ball Instance { get => instance; set => instance = value; }
+    public BallStatus BallStatus { get => ballStatus; set => ballStatus = value; }
+
+    #endregion
+
+
+
+
+
+}
+public enum BallStatus
+{
+    free, dribblingByPlayer, holdingByPlayer, throwByPlayer
 }
