@@ -68,8 +68,7 @@ public class Ball : MonoBehaviour
     {
         if(ballStatus == BallStatus.free)
         {
-            rigidbody.isKinematic = false;
-            rigidbody.constraints = RigidbodyConstraints.None;
+            MakeNonKinematic();
             if (dribblingTweener!=null &&dribblingTweener.active)
             {
                 dribblingTweener.Kill(false);
@@ -79,14 +78,13 @@ public class Ball : MonoBehaviour
         else if(ballStatus == BallStatus.dribblingByPlayer)
         {
             dribblingCompleted = true;
-            rigidbody.isKinematic=true;
+            MakeKinematic();
             rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationY;
-            rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+
         }
         else if(ballStatus == BallStatus.holdingByPlayer)
         {
-            rigidbody.isKinematic=true;
-            rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+            MakeKinematic();
             ownerMidOfHands = owner.transform.Find("Body/Arms/RightShoulder/MidOfHands");
             if (dribblingTweener != null && dribblingTweener.active)
             {
@@ -95,8 +93,7 @@ public class Ball : MonoBehaviour
         }
         else if(ballStatus == BallStatus.throwByPlayer)
         {
-            rigidbody.isKinematic = false;
-            rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+            MakeNonKinematic();
             if (dribblingTweener != null && dribblingTweener.active)
             {
                 dribblingTweener.Kill(false);
@@ -111,13 +108,35 @@ public class Ball : MonoBehaviour
     {
         ballStatus = BallStatus.holdingByPlayer;
         ballStatusChanged = true;
-        rigidbody.isKinematic = true;
+        MakeKinematic();
         ownerMidOfHands = owner.transform.Find("Body/Arms/RightShoulder/MidOfHands");
         transform.position = ownerMidOfHands.position;
         if (dribblingTweener != null && dribblingTweener.active)
         {
             dribblingTweener.Kill(false);
         }
+    }
+
+    public void OnOwnerStartShot()
+    {
+        ballStatus = BallStatus.holdingByPlayer;
+        ballStatusChanged = true;
+        MakeKinematic();
+        ownerMidOfHands = owner.transform.Find("Body/Arms/RightShoulder/MidOfHands");
+        transform.position = ownerMidOfHands.position;
+        if (dribblingTweener != null && dribblingTweener.active)
+        {
+            dribblingTweener.Kill(false);
+        }
+    }
+
+    public void OnOwnerEndShot(Vector3 velocity)
+    {
+                
+        ballStatus = BallStatus.throwByPlayer;
+        ballStatusChanged = true;
+        throwVector = velocity;
+
     }
 
 
@@ -165,7 +184,7 @@ public class Ball : MonoBehaviour
         transform.position = ownerMidOfHands.position;
     }
 
-    public Vector3 throwVector;
+    private Vector3 throwVector;
     private bool throwingRoutineRunning;
     private void ExecuteThrowStatus()
     {
@@ -179,16 +198,17 @@ public class Ball : MonoBehaviour
 
     private IEnumerator ThrowRoutine(Vector3 vector)
     {
-        rigidbody.isKinematic = false;
-        rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+        throwingRoutineRunning = true;
+        MakeKinematic();
         yield return new WaitForFixedUpdate();
+        MakeNonKinematic();
+
         rigidbody.velocity = vector;
         // farkli bir seyler eklenebilir
         yield return new WaitForSeconds(1f);
-        
         ballStatus = BallStatus.free;
         ballStatusChanged = true;
-
+        throwingRoutineRunning = false;
     }
 
 
@@ -212,6 +232,21 @@ public class Ball : MonoBehaviour
         }
     }
 
+
+
+    private void MakeKinematic()
+    {
+
+        rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+        rigidbody.isKinematic=true;
+    }
+    private void MakeNonKinematic()
+    {
+
+        rigidbody.isKinematic = false;
+        rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+
+    }
 
 
     #region GetterSetter
