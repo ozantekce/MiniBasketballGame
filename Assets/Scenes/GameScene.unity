@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641424, b: 0.5748196, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -241,13 +241,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 916042282}
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
+  m_LocalRotation: {x: 0.29883623, y: -0.64085644, z: 0.29883623, w: 0.64085644}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 50, y: -90, z: 0}
 --- !u!114 &994070687
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -260,9 +260,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ca4bc3bb2d96b24b83a37848ba27998, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 4
+  movementSpeed: 6
   rotationSpeed: 2
-  jumpHeight: 4
+  jumpHeight: 5
   rivalHoop: {fileID: 1085075012}
   throwTarget: {fileID: 1499076115}
   shotScrollBar: {fileID: 1423714693179273208}
@@ -2736,6 +2736,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8927026910726656460, guid: 36b8d672a7389524090db6a6a984a18b, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 91ba1d538153c234ca7a9b2a91000cf8, type: 2}
+    - target: {fileID: 8927026910762147991, guid: 36b8d672a7389524090db6a6a984a18b, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 91ba1d538153c234ca7a9b2a91000cf8, type: 2}
+    - target: {fileID: 8927026911390831582, guid: 36b8d672a7389524090db6a6a984a18b, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 91ba1d538153c234ca7a9b2a91000cf8, type: 2}
     - target: {fileID: 8927026912195061637, guid: 36b8d672a7389524090db6a6a984a18b, type: 3}
       propertyPath: m_Name
       value: Field
@@ -2783,6 +2795,14 @@ PrefabInstance:
     - target: {fileID: 8927026912195061638, guid: 36b8d672a7389524090db6a6a984a18b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8927026912230797085, guid: 36b8d672a7389524090db6a6a984a18b, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 91ba1d538153c234ca7a9b2a91000cf8, type: 2}
+    - target: {fileID: 8927026912540419246, guid: 36b8d672a7389524090db6a6a984a18b, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 36b8d672a7389524090db6a6a984a18b, type: 3}

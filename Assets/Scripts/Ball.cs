@@ -77,6 +77,7 @@ public class Ball : MonoBehaviour
         }
         else if(ballStatus == BallStatus.dribblingByPlayer)
         {
+            ownerHand = owner.transform.Find("Body/Arms/RightShoulder/Hand");
             dribblingCompleted = true;
             MakeKinematic();
             rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationY;
@@ -148,10 +149,12 @@ public class Ball : MonoBehaviour
 
     private bool dribblingCompleted =true;
     private Tweener dribblingTweener;
+    private Transform ownerHand;
+
     private void ExecuteDribblingStatus()
     {
         float groundY = 0.7f;
-        float handY = 1.5f;
+        float handY = ownerHand.position.y;
 
         Vector3 trimming = owner.transform.forward * 0.7f;
         trimming = Quaternion.Euler(0, 23.66f, 0) * trimming;
@@ -165,8 +168,10 @@ public class Ball : MonoBehaviour
         if (dribblingCompleted)
         {
             dribblingCompleted=false;
-            dribblingTweener = transform.DOMoveY(groundY, 0.7f).OnComplete(delegate {
-                dribblingTweener = transform.DOMoveY(handY, 0.7f).OnComplete(delegate
+            float sendHandTime = 0.7f * CONSTANTS.Linear(Mathf.Abs(handY-transform.position.y),0,1.6f);
+
+            dribblingTweener = transform.DOMoveY(handY, sendHandTime).OnComplete(delegate {
+                dribblingTweener = transform.DOMoveY(groundY, 0.7f).OnComplete(delegate
                 {
                     dribblingCompleted = true;
                 });
@@ -202,7 +207,7 @@ public class Ball : MonoBehaviour
         MakeKinematic();
         yield return new WaitForFixedUpdate();
         MakeNonKinematic();
-
+        owner = null;
         rigidbody.velocity = vector;
         // farkli bir seyler eklenebilir
         yield return new WaitForSeconds(1f);
