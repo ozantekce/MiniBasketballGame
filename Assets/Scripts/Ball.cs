@@ -72,13 +72,13 @@ public class Ball : MonoBehaviour
             rigidbody.constraints = RigidbodyConstraints.None;
             if (dribblingTweener!=null &&dribblingTweener.active)
             {
-                dribblingTweener.Kill();
+                dribblingTweener.Kill(false);
             }
             rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
         }
         else if(ballStatus == BallStatus.dribblingByPlayer)
         {
-            dribblingComplate = true;
+            dribblingCompleted = true;
             rigidbody.isKinematic=true;
             rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationY;
             rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
@@ -90,7 +90,7 @@ public class Ball : MonoBehaviour
             ownerMidOfHands = owner.transform.Find("Body/Arms/RightShoulder/MidOfHands");
             if (dribblingTweener != null && dribblingTweener.active)
             {
-                dribblingTweener.Kill();
+                dribblingTweener.Kill(false);
             }
         }
         else if(ballStatus == BallStatus.throwByPlayer)
@@ -99,7 +99,7 @@ public class Ball : MonoBehaviour
             rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
             if (dribblingTweener != null && dribblingTweener.active)
             {
-                dribblingTweener.Kill();
+                dribblingTweener.Kill(false);
             }
         }
 
@@ -107,6 +107,18 @@ public class Ball : MonoBehaviour
 
     }
 
+    public void OnOwnerJumped()
+    {
+        ballStatus = BallStatus.holdingByPlayer;
+        ballStatusChanged = true;
+        rigidbody.isKinematic = true;
+        ownerMidOfHands = owner.transform.Find("Body/Arms/RightShoulder/MidOfHands");
+        transform.position = ownerMidOfHands.position;
+        if (dribblingTweener != null && dribblingTweener.active)
+        {
+            dribblingTweener.Kill(false);
+        }
+    }
 
 
     private void ExecuteFreeStatus()
@@ -115,7 +127,7 @@ public class Ball : MonoBehaviour
 
     }
 
-    private bool dribblingComplate =true;
+    private bool dribblingCompleted =true;
     private Tweener dribblingTweener;
     private void ExecuteDribblingStatus()
     {
@@ -131,13 +143,13 @@ public class Ball : MonoBehaviour
             , owner.transform.position.z +trimming.z
             );
 
-        if (dribblingComplate)
+        if (dribblingCompleted)
         {
-            dribblingComplate=false;
+            dribblingCompleted=false;
             dribblingTweener = transform.DOMoveY(groundY, 0.7f).OnComplete(delegate {
-                transform.DOMoveY(handY, 0.7f).OnComplete(delegate
+                dribblingTweener = transform.DOMoveY(handY, 0.7f).OnComplete(delegate
                 {
-                    dribblingComplate = true;
+                    dribblingCompleted = true;
                 });
             });
         }
@@ -205,6 +217,7 @@ public class Ball : MonoBehaviour
     #region GetterSetter
     public static Ball Instance { get => instance; set => instance = value; }
     public BallStatus BallStatus { get => ballStatus; set => ballStatus = value; }
+    public GameObject Owner { get => owner; }
 
     #endregion
 
