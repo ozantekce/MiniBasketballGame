@@ -6,7 +6,7 @@ using DG.Tweening;
 public class Ball : MonoBehaviour
 {
 
-    private Ball instance;
+    private static Ball instance;
 
     private void Awake()
     {
@@ -38,7 +38,7 @@ public class Ball : MonoBehaviour
 
     private void Update()
     {
-
+        elapsedTimeChangeOwner+=Time.deltaTime;
         if (ballStatusChanged)
         {
             OnStatusChanged();
@@ -70,9 +70,9 @@ public class Ball : MonoBehaviour
         {
             rigidbody.isKinematic = false;
             rigidbody.constraints = RigidbodyConstraints.None;
-            if (dribbling!=null &&dribbling.active)
+            if (dribblingTweener!=null &&dribblingTweener.active)
             {
-                dribbling.Kill();
+                dribblingTweener.Kill();
             }
             rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
         }
@@ -88,18 +88,18 @@ public class Ball : MonoBehaviour
             rigidbody.isKinematic=true;
             rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
             ownerMidOfHands = owner.transform.Find("Body/Arms/RightShoulder/MidOfHands");
-            if (dribbling != null && dribbling.active)
+            if (dribblingTweener != null && dribblingTweener.active)
             {
-                dribbling.Kill();
+                dribblingTweener.Kill();
             }
         }
         else if(ballStatus == BallStatus.throwByPlayer)
         {
             rigidbody.isKinematic = false;
             rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-            if (dribbling != null && dribbling.active)
+            if (dribblingTweener != null && dribblingTweener.active)
             {
-                dribbling.Kill();
+                dribblingTweener.Kill();
             }
         }
 
@@ -116,7 +116,7 @@ public class Ball : MonoBehaviour
     }
 
     private bool dribblingComplate =true;
-    private Tweener dribbling;
+    private Tweener dribblingTweener;
     private void ExecuteDribblingStatus()
     {
         float groundY = 0.7f;
@@ -134,7 +134,7 @@ public class Ball : MonoBehaviour
         if (dribblingComplate)
         {
             dribblingComplate=false;
-            dribbling = transform.DOMoveY(groundY, 0.7f).OnComplete(delegate {
+            dribblingTweener = transform.DOMoveY(groundY, 0.7f).OnComplete(delegate {
                 transform.DOMoveY(handY, 0.7f).OnComplete(delegate
                 {
                     dribblingComplate = true;
@@ -154,11 +154,11 @@ public class Ball : MonoBehaviour
     }
 
     public Vector3 throwVector;
-    private bool throwing;
+    private bool throwingRoutineRunning;
     private void ExecuteThrowStatus()
     {
 
-        if (!throwing)
+        if (!throwingRoutineRunning)
         {
             StartCoroutine(ThrowRoutine(throwVector));
         }
@@ -180,9 +180,30 @@ public class Ball : MonoBehaviour
     }
 
 
+    private float minTimeToChangeOwner = 2f;
+    private float elapsedTimeChangeOwner;
+    public void ChangeOwnerRequest(GameObject source)
+    {
+
+        if (source == owner)
+            return;
+        else if(minTimeToChangeOwner<=elapsedTimeChangeOwner)
+        {
+            elapsedTimeChangeOwner = 0;
+            owner = source;
+            ballStatus = BallStatus.dribblingByPlayer;
+            ballStatusChanged = true;
+            if (dribblingTweener!=null && dribblingTweener.active)
+            {
+                dribblingTweener.Kill();
+            }
+        }
+    }
+
+
 
     #region GetterSetter
-    public Ball Instance { get => instance; set => instance = value; }
+    public static Ball Instance { get => instance; set => instance = value; }
     public BallStatus BallStatus { get => ballStatus; set => ballStatus = value; }
 
     #endregion
