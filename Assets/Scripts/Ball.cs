@@ -108,15 +108,21 @@ public class Ball : MonoBehaviour
 
     private bool dribblingComplate =true;
     private Tweener dribbling;
+
+    public float angle;
+    public float mag;
     private void ExecuteDribblingStatus()
     {
         float groundY = 0.7f;
-        float handY = 1.8f;
+        float handY = 1.5f;
+
+        Vector3 trimming = owner.transform.forward * 0.7f;
+        trimming = Quaternion.Euler(0, 23.66f, 0) * trimming;
 
         transform.position = new Vector3(
-            owner.transform.position.x+0.2f
+            owner.transform.position.x+trimming.x
             , transform.position.y
-            , owner.transform.position.z +0.6f
+            , owner.transform.position.z +trimming.z
             );
 
         if (dribblingComplate)
