@@ -7,7 +7,7 @@ using DG.Tweening;
 public class Player : MonoBehaviour
 {
 
-    private Vision vision;
+    private VisionArea vision;
     private Rigidbody rigidbody;
 
     [SerializeField]
@@ -16,7 +16,7 @@ public class Player : MonoBehaviour
     private void Start()
     {
         
-        vision = GetComponent<Vision>();
+        vision = GetComponent<VisionArea>();
         rigidbody = GetComponent<Rigidbody>();
 
 
@@ -41,7 +41,8 @@ public class Player : MonoBehaviour
             Movement();
             Rotate();
             Jump();
-            Throw();
+            if(Ball.Instance.Owner == gameObject)
+                Throw();
         }
             
         

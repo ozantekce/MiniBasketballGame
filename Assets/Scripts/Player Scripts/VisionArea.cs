@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class Vision : MonoBehaviour
+public class VisionArea : MonoBehaviour
 {
 
     public List<Transform> visibleTargets = new List<Transform>();

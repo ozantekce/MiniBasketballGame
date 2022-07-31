@@ -211,6 +211,7 @@ public class Ball : MonoBehaviour
         rigidbody.velocity = vector;
         // farkli bir seyler eklenebilir
         yield return new WaitForSeconds(1f);
+        owner = null;
         ballStatus = BallStatus.free;
         ballStatusChanged = true;
         throwingRoutineRunning = false;
